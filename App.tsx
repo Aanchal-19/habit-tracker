@@ -35,24 +35,48 @@
 // });
 
 import {useState} from 'react'
-import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Pressable, FlatList } from 'react-native';
+
+type Habit = {id: string, habitString: string};
 
 export default function App() {
-  // const [Habbit]
+  const [habitInput, setInput] = useState('');
+  const [habits, setHabit] = useState<Habit[]>([]);
+
+  const addHabit = () => {
+    if (habitInput.trim() === '') return 
+    const newHabit: Habit = {id: Date.now().toString(), habitString: habitInput.trim()};
+    setHabit([...habits, newHabit]);
+    setInput('');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Habit Tracker</Text>
 
       <View style={styles.viewContainer}>
-        <TextInput style={styles.input} multiline textAlignVertical='top' placeholder="New Habbit..." />
+        <TextInput style={styles.input} value={habitInput} onChangeText={setInput} multiline textAlignVertical='top' placeholder="New Habbit..." />
 
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={addHabit}>
           <Text>Save Habbit</Text>
         </Pressable>
 
       </View>
 
       <Text style={styles.text}>My Habits</Text>
+
+      <FlatList 
+        data={habits} 
+        keyExtractor={(item) => item.id}
+        renderItem={({item}) => (
+          <View>
+
+          <Text style={styles.input}>
+            {item.habitString}
+          </Text>
+
+          </View>
+        )}/>
 
     </View>
   );
