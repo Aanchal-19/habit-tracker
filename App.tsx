@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 type Habit = {id: string, habitString: string, habitSubstring: string, isCompleted: boolean};
 
-const demo: [Habit] = [
+const demo: Habit[] = [
     { id: '1', habitString: 'Drink water',   habitSubstring: '5', isCompleted: true  },
     { id: '2', habitString: 'Read 20 pages', habitSubstring: '2', isCompleted: true  },
     { id: '3', habitString: 'Go for a walk', habitSubstring: '0', isCompleted: false },
@@ -27,6 +27,12 @@ export default function App() {
      )
     );
   };
+  const deleteHabit = (id: string) => {
+    setNewHabit(habits.filter((h) =>
+      h.id !== id
+    ));
+  };
+  const doneCount = habits.filter((h) => h.isCompleted).length;
 
   return(
     <View style={styles.contentView}>
@@ -37,7 +43,7 @@ export default function App() {
         </Text>
 
         <Text style={styles.subHeadingText}>
-          2 of 4 done today
+          {doneCount} of {habits.length} done today
         </Text>
 
       </View>
@@ -74,7 +80,11 @@ export default function App() {
               </Text>
             </View>
           </View>
-          <Ionicons name="trash-outline" size={20} color={colors.danger}/>
+
+          <Pressable hitSlop={10} onPress={() => deleteHabit(item.id)}>
+            <Ionicons name="trash-outline" size={20} color={colors.danger}/>
+          </Pressable>
+
         </View>
       )}/>
       
