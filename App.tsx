@@ -20,6 +20,13 @@ export default function App() {
     setNewHabit([...habits, newHabit]);
     setInput('');
   };
+  const toggleHabit = (id: string) => {
+    setNewHabit(
+      habits.map((h) => 
+        h.id === id ? {...h, isCompleted: !h.isCompleted} : h
+     )
+    );
+  };
 
   return(
     <View style={styles.contentView}>
@@ -51,6 +58,11 @@ export default function App() {
 
       <FlatList data={habits} keyExtractor={(item) => item.id} renderItem={({item}) => (
         <View style={styles.habitCardView}>
+
+          <Pressable style={(item.isCompleted) ? styles.checkBoxFilled : styles.checkBoxEmpty} onPress={() => toggleHabit(item.id)} hitSlop={10}>
+            {item.isCompleted && (<Ionicons name="checkmark" size={14} color={colors.doneTick}/>)}
+          </Pressable>
+
           <View style={styles.textColumn}>
             <View>
               <Text style={(item.isCompleted) ? styles.completedHabitText : styles.habitText}>
@@ -101,4 +113,6 @@ const styles = StyleSheet.create({
   completedHabitText: {fontSize: 15, textDecorationLine: 'line-through', color: colors.textSecondary},
   subStrigText: {fontSize: 12, color: colors.textMuted, marginTop: 2},
   textColumn: {flex: 1},
+  checkBoxEmpty: {width: 22, height: 22, borderRadius: 11, borderWidth: 1.5, color: colors.circleBorder},
+  checkBoxFilled: {justifyContent: 'center', alignItems: 'center', width: 22, height: 22, borderRadius: 11, backgroundColor: colors.doneBg, borderWidth: 1.5}
 });
